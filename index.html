@@ -3,288 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Effo 易作 - AI写作体验深度推导</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --bg-gray: #f9fafb;
-            --bg-white: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            color: var(--text-main);
-            line-height: 1.6;
-            background-color: var(--bg-white);
-            /* 确保页面原生垂直滚动 */
-            overflow-y: auto; 
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        section {
-            padding: 100px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        section:nth-child(even) {
-            background-color: var(--bg-gray);
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 24px;
-            line-height: 1.2;
-        }
-
-        h2 {
-            font-size: 2.25rem;
-            margin-bottom: 16px;
-            color: var(--text-main);
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 12px;
-            color: var(--primary-color);
-        }
-
-        p {
-            font-size: 1.125rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
-        .tag-line {
-            display: inline-block;
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--primary-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        /* 布局网格 */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-        }
-
-        /* 卡片样式 */
-        .card {
-            background: #fff;
-            padding: 32px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* 图片样式 */
-        .mockup-img {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: block;
-        }
-
-        /* 步骤条 */
-        .step-list {
-            list-style: none;
-            counter-reset: my-counter;
-        }
-
-        .step-list li {
-            position: relative;
-            padding-left: 60px;
-            margin-bottom: 30px;
-        }
-
-        .step-list li::before {
-            counter-increment: my-counter;
-            content: counter(my-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 40px;
-            height: 40px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .grid-2, .grid-3 {
-                grid-template-columns: 1fr;
+    <title>Effo易作 - AI写作工具体验升级</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4F46E5', // Indigo 600
+                        secondary: '#0EA5E9', // Sky 500
+                        dark: '#0F172A', // Slate 900
+                        light: '#F8FAFC', // Slate 50
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'gradient-dark': 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                        'gradient-primary': 'linear-gradient(135deg, #4F46E5 0%, #0EA5E9 100%)',
+                    }
+                }
             }
-            h1 { font-size: 2.25rem; }
-            section { padding: 60px 0; }
         }
+    </script>
+    <style>
+        /* 页面基础样式 - 垂直长页流式布局 */
+        body { margin: 0; background-color: #e2e8f0; font-family: 'Inter', 'Noto Sans SC', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 60px 0; overflow-x: hidden;}
+        
+        /* 每一个 Section 相当于原来的 Slide，设定固定宽高以维持原有设计版式 */
+        .slide-wrapper { width: 1280px; height: 720px; background: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; overflow: hidden; border-radius: 12px; flex-shrink: 0; }
+        
+        /* 装饰元素 */
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5); }
+        .glass-panel-dark { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .text-gradient { background: -webkit-linear-gradient(0deg, #4F46E5, #0EA5E9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* 特效动画 */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); } }
+        .pulse-ring { animation: pulse-ring 2s infinite; }
     </style>
 </head>
 <body>
 
-    <section id="hero">
-        <div class="container grid-2">
-            <div>
-                <span class="tag-line">B2C AI Product Case Study</span>
-                <h1>Effo 易作<br>AI写作体验深度重塑</h1>
-                <p>基于阿里“五导家”方法论，打破同质化红海。将极高的提示词门槛，转化为零门槛的可视化心流，助力新媒体与办公圈层的高效产出。</p>
-                <div style="margin-top: 30px; display: flex; gap: 40px;">
-                    <div>
-                        <strong>Role</strong>
-                        <p>UX / UI Designer</p>
-                    </div>
-                    <div>
-                        <strong>Platform</strong>
-                        <p>Web / Mobile</p>
-                    </div>
-                </div>
+    <section class="slide-wrapper bg-gradient-dark overflow-hidden">
+        <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-primary/20 blur-[80px] mix-blend-screen"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-secondary/20 blur-[80px] mix-blend-screen"></div>
+        
+        <div class="relative z-10 w-full h-full flex flex-col justify-center px-24">
+            <div class="mb-6 inline-block">
+                <span class="px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium backdrop-blur-sm shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+                    <i class="fas fa-magic mr-2 text-secondary"></i> B2C / AI Tool Product Design
+                </span>
             </div>
-            <div>
-                <img src="启动页.png" alt="Effo 启动页" class="mockup-img" onerror="this.src='https://via.placeholder.com/600x800?text=启动页.png'">
-            </div>
-        </div>
-    </section>
-
-    <section id="analysis-01">
-        <div class="container">
-            <span class="tag-line">Competitor Analysis 01</span>
-            <h2>市场格局痛点：在“高门槛”与“同质化”中突围</h2>
-            <p>当前市面上的 AI 写作工具呈两极分化态势，用户要么被高昂的学习成本劝退，要么被千篇一律的废话模板折磨。</p>
             
-            <div class="grid-3" style="margin-top: 40px;">
-                <div class="card">
-                    <h3>原生对话大模型</h3>
-                    <p style="font-size: 0.9rem;">代表：ChatGPT / 文心一言</p>
-                    <p>将“如何提问”的压力完全抛给用户。小白面对空白输入框极易产生“认知瘫痪”。</p>
-                    <ul style="padding-left: 20px; color: var(--text-muted);">
-                        <li>Prompt 编写门槛极高</li>
-                        <li>生成结果充满“机翻味”</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>传统模板型工具</h3>
-                    <p style="font-size: 0.9rem;">代表：早期套壳应用</p>
-                    <p>采用传统的死板表单收集信息，剥夺了用户的创作参与感与微调的自由度。</p>
-                    <ul style="padding-left: 20px; color: var(--text-muted);">
-                        <li>内容高度同质化</li>
-                        <li>僵化的修改体验</li>
-                    </ul>
-                </div>
-                <div class="card" style="border: 2px solid var(--primary-color);">
-                    <h3>Effo 易作 (本品)</h3>
-                    <p style="font-size: 0.9rem; color: var(--primary-color);">核心破局策略</p>
-                    <p>融合对话的强大生成能力与模板的易用性，打造“可视化参数向导”。</p>
-                    <ul style="padding-left: 20px; color: var(--text-muted);">
-                        <li>隐性 Prompt 显性化，零门槛</li>
-                        <li>深度角色与排版定制</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="analysis-02">
-        <div class="container">
-            <span class="tag-line">Competitor Analysis 02</span>
-            <h2>多维能力矩阵与“兴奋型”体验降维打击</h2>
-            <p>基于产品五大核心维度构建体验评价体系，Effo 专注于在“期望型”与“兴奋型”需求上拉开巨大身位。通过 KANO 模型验证，建立体验护城河。</p>
+            <h1 class="text-7xl font-black text-white mb-6 leading-tight tracking-tight">
+                Effo 易作 <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">AI全能写作助理</span><br>
+                体验升级与重构
+            </h1>
             
-            <div class="grid-2" style="margin-top: 40px;">
+            <p class="text-xl text-slate-300 mb-12 max-w-2xl font-light leading-relaxed">
+                基于阿里“五导家”设计方法论，从商业诉求到设计执行的完整推导。打破同质化困局，为新媒体、学生、办公族打造极简沉浸的AI创作心流。
+            </p>
+            
+            <div class="flex items-center gap-12 border-t border-white/10 pt-8 mt-4 w-max">
                 <div>
-                    <h3>解法 1：模块化组件替代长文本</h3>
-                    <p>将复杂的 Prompt 拆解为“核心主题(输入框) + 语气人设(标签) + 文章长度(滑块)”。利用尼尔森法则中的“识别好过回忆”，大幅降低用户认知负荷。</p>
+                    <p class="text-xs text-slate-400 uppercase tracking-widest mb-1 font-bold">Role</p>
+                    <p class="text-white font-medium">UX / UI Designer</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 uppercase tracking-widest mb-1 font-bold">Platform</p>
+                    <p class="text-white font-medium">iOS / Android / Web</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 uppercase tracking-widest mb-1 font-bold">Methodology</p>
+                    <p class="text-white font-medium"><i class="fab fa-alipay text-blue-400 mr-1"></i> 五导家体验设计</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute right-20 top-1/2 -translate-y-1/2 w-[320px] h-[650px] rotate-[-5deg] animate-float z-20">
+            <div class="w-full h-full rounded-[40px] p-2 bg-slate-800 border-4 border-slate-700 shadow-2xl relative overflow-hidden ring-8 ring-white/5">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-xl z-30"></div> <img src="启动页.png" alt="Effo启动页" class="w-full h-full object-cover rounded-[32px] relative z-10" onerror="this.src='https://via.placeholder.com/400x800/4F46E5/FFF?text=App+Cover'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-20 rounded-[32px]"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-slate-50">
+        <div class="p-16 h-full flex flex-col">
+            <div class="flex justify-between items-end mb-10 border-b border-slate-200 pb-6">
+                <div>
+                    <h3 class="text-indigo-600 font-black tracking-widest text-sm mb-2 uppercase">Market Context</h3>
+                    <h2 class="text-4xl font-bold text-slate-900">市场痛点洞察：同质化红海与极高的认知门槛</h2>
+                </div>
+            </div>
+
+            <div class="flex-1 grid grid-cols-2 gap-12">
+                <div class="bg-white rounded-[32px] p-8 shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-0 transition-transform group-hover:scale-110"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-robot"></i></div>
+                        <h4 class="text-2xl font-black text-slate-800 mb-3">原生 Chat 对话类工具</h4>
+                        <p class="text-slate-500 mb-6 h-12">如 ChatGPT。给了用户极大的自由度，却把“如何提问”的压力完全抛给了用户。</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-700">高认知负荷 (Prompt编写门槛)</p>
+                                    <p class="text-xs text-slate-500 mt-1">小白用户面对空白输入框往往产生“认知瘫痪”，不知如何调教AI。</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-700">不可控的“机翻味”</p>
+                                    <p class="text-xs text-slate-500 mt-1">缺乏角色约束，生成的长文干瘪套路，修改成本极高。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[32px] p-8 shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-0 transition-transform group-hover:scale-110"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-table"></i></div>
+                        <h4 class="text-2xl font-black text-slate-800 mb-3">传统表单模板类工具</h4>
+                        <p class="text-slate-500 mb-6 h-12">早期的壳应用。通过死板的填空收集信息，剥夺了用户的创作参与感。</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-circle text-orange-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-700">内容高度同质化</p>
+                                    <p class="text-xs text-slate-500 mt-1">千篇一律的模板导致产出雷同，无法满足新媒体等对个性的需求。</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-circle text-orange-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-700">僵化的微调体验</p>
+                                    <p class="text-xs text-slate-500 mt-1">生成后无法进行上下文连贯的二次修改，只能重新填表。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex items-center justify-center gap-4">
+                <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">核心结论</span>
+                <p class="text-indigo-900 font-medium text-sm">用户真正的需求不是“一个能聊天的AI”，而是一个<strong class="text-indigo-600 text-base mx-1">无需学习、懂排版、有语气的全能写作副驾驶</strong>。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-slate-900 text-white">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTU5IDU5TDEgMVptMC01OEwxIDU5WiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiBmaWxsPSJub25lIi8+PC9zdmc+')] opacity-50"></div>
+        
+        <div class="relative z-10 p-16 h-full flex flex-col">
+            <div class="mb-10 flex justify-between items-end">
+                <div>
+                    <div class="inline-block px-3 py-1 bg-white/10 backdrop-blur border border-white/20 text-cyan-300 font-black text-[10px] rounded-sm mb-3 uppercase tracking-widest">Competitor Analysis · Strategy Level</div>
+                    <h2 class="text-4xl font-black mb-2">多维竞争力雷达：基于 KANO 模型的破局</h2>
+                    <p class="text-slate-400 text-sm">摒弃“大而全”，Effo 将资源倾斜至“期望型”与“兴奋型”体验，打造护城河。</p>
+                </div>
+            </div>
+
+            <div class="flex-1 flex gap-8">
+                <div class="w-1/3 bg-slate-800/50 backdrop-blur rounded-[24px] border border-slate-700 p-6 flex flex-col justify-center">
+                    <h4 class="text-lg font-bold mb-6 text-slate-200 border-l-4 border-cyan-400 pl-3">基于 KANO 模型的需求分层</h4>
+                    <div class="relative h-48 w-full border-l-2 border-b-2 border-slate-600 mb-6">
+                        <span class="absolute -left-6 top-0 text-[10px] text-slate-400 -rotate-90 origin-left">用户满意度</span>
+                        <span class="absolute bottom-[-20px] right-0 text-[10px] text-slate-400">功能具备度</span>
+                        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 150" preserveAspectRatio="none">
+                            <path d="M 0,150 Q 100,130 200,80" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" /> <path d="M 0,150 L 200,0" fill="none" stroke="#3b82f6" stroke-width="2" /> <path d="M 0,100 Q 50,20 200,0" fill="none" stroke="#10b981" stroke-width="3" /> </svg>
+                        <div class="absolute right-0 top-0 text-[10px] space-y-1">
+                            <div class="flex items-center gap-1"><div class="w-3 h-0.5 bg-emerald-500"></div><span class="text-slate-300">兴奋型 (A)</span></div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-0.5 bg-blue-500"></div><span class="text-slate-300">期望型 (O)</span></div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-0.5 border-t border-dashed border-red-500"></div><span class="text-slate-300">基础型 (M)</span></div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        竞品多停留在“能写出字”的基础层。Effo 的核心战略是发力<strong class="text-emerald-400 font-normal">兴奋型需求（如一键爆款排版、沉浸式卡片UI）</strong>，实现体验的降维打击。
+                    </p>
+                </div>
+
+                <div class="w-2/3 bg-slate-800/30 rounded-[24px] border border-slate-700 overflow-hidden flex flex-col">
+                    <div class="grid grid-cols-4 bg-slate-800/80 p-4 border-b border-slate-700 text-sm font-bold text-center items-center">
+                        <div class="text-left pl-4 text-slate-400">体验层级 / 功能触点</div>
+                        <div class="text-slate-400">通用大模型 (Chat)</div>
+                        <div class="text-slate-400">早期模板 App</div>
+                        <div class="text-cyan-300 bg-cyan-900/30 py-2 rounded-lg border border-cyan-700 shadow-[0_0_15px_rgba(34,211,238,0.2)]">Effo 易作 (本项目)</div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto">
+                        <div class="grid grid-cols-4 border-b border-slate-700/50 p-4 items-center text-center text-sm transition-colors hover:bg-slate-800/40">
+                            <div class="text-left pl-4"><span class="px-2 py-0.5 bg-red-900/50 text-red-400 text-[10px] rounded mr-2">M 基础</span>长文生成与逻辑理解</div>
+                            <div><i class="fas fa-check-circle text-emerald-500"></i><span class="block text-[10px] text-slate-500 mt-1">优秀</span></div>
+                            <div><i class="fas fa-check text-slate-400"></i><span class="block text-[10px] text-slate-500 mt-1">死板</span></div>
+                            <div class="bg-cyan-900/10 rounded-lg"><i class="fas fa-check-circle text-emerald-500"></i><span class="block text-[10px] text-cyan-500 mt-1">自研微调模型</span></div>
+                        </div>
+                        <div class="grid grid-cols-4 border-b border-slate-700/50 p-4 items-center text-center text-sm transition-colors hover:bg-slate-800/40">
+                            <div class="text-left pl-4"><span class="px-2 py-0.5 bg-blue-900/50 text-blue-400 text-[10px] rounded mr-2">O 期望</span>特定角色/语气的精准调配</div>
+                            <div><i class="fas fa-minus text-yellow-500"></i><span class="block text-[10px] text-slate-500 mt-1">需复杂Prompt</span></div>
+                            <div><i class="fas fa-times text-red-500"></i><span class="block text-[10px] text-slate-500 mt-1">不支持</span></div>
+                            <div class="bg-cyan-900/10 rounded-lg py-1"><i class="fas fa-check-circle text-emerald-400 text-lg"></i><span class="block text-[10px] text-cyan-300 mt-1 font-bold">可视化滑块调节</span></div>
+                        </div>
+                        <div class="grid grid-cols-4 border-b border-slate-700/50 p-4 items-center text-center text-sm transition-colors hover:bg-slate-800/40">
+                            <div class="text-left pl-4"><span class="px-2 py-0.5 bg-blue-900/50 text-blue-400 text-[10px] rounded mr-2">O 期望</span>富文本排版与格式化保留</div>
+                            <div><i class="fas fa-times text-red-500"></i><span class="block text-[10px] text-slate-500 mt-1">仅纯文本/MD</span></div>
+                            <div><i class="fas fa-minus text-yellow-500"></i><span class="block text-[10px] text-slate-500 mt-1">格式固定</span></div>
+                            <div class="bg-cyan-900/10 rounded-lg py-1"><i class="fas fa-check-circle text-emerald-400 text-lg"></i><span class="block text-[10px] text-cyan-300 mt-1 font-bold">小红书/公众号一键排版</span></div>
+                        </div>
+                        <div class="grid grid-cols-4 p-4 items-center text-center text-sm transition-colors hover:bg-slate-800/40">
+                            <div class="text-left pl-4"><span class="px-2 py-0.5 bg-emerald-900/50 text-emerald-400 text-[10px] rounded mr-2">A 兴奋</span>零门槛的沉浸式“填卡”交互</div>
+                            <div><i class="fas fa-times text-red-500"></i><span class="block text-[10px] text-slate-500 mt-1">面对空白发呆</span></div>
+                            <div><i class="fas fa-times text-red-500"></i><span class="block text-[10px] text-slate-500 mt-1">表单繁杂枯燥</span></div>
+                            <div class="bg-cyan-900/20 border border-cyan-500/50 rounded-lg py-2 shadow-[0_0_10px_rgba(34,211,238,0.2)]"><i class="fas fa-star text-yellow-400 text-xl animate-pulse"></i><span class="block text-[10px] text-cyan-300 mt-1 font-black">独家模块化心流</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-[#111827]">
+        <div class="flex h-full w-full">
+            <div class="w-1/2 p-14 bg-red-950/20 relative flex flex-col border-r border-slate-800">
+                <div class="absolute inset-0 bg-gradient-to-br from-red-900/10 to-transparent pointer-events-none"></div>
+                
+                <div class="relative z-10 mb-8">
+                    <h3 class="text-red-400 font-bold text-sm tracking-widest mb-2 flex items-center"><i class="fas fa-times-circle mr-2"></i>PAIN POINT / 竞品通病</h3>
+                    <h2 class="text-3xl font-black text-slate-200">违反“识别好过回忆”</h2>
+                    <p class="text-slate-400 text-sm mt-2 max-w-md">纯对话界面让用户承担了极高的认知负荷（Cognitive Load），用户必须自己在大脑中“回忆”并构建复杂的提示词结构。</p>
+                </div>
+
+                <div class="flex-1 flex flex-col justify-center items-center relative z-10">
+                    <div class="w-full max-w-[340px] bg-slate-800/80 rounded-2xl border border-red-500/30 p-4 shadow-2xl relative">
+                        <div class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">高错误率灾区</div>
+                        
+                        <div class="flex gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-full bg-slate-700 shrink-0"></div>
+                            <div class="flex-1 bg-slate-700/50 rounded-xl rounded-tl-sm p-3 border border-slate-600">
+                                <div class="w-3/4 h-2 bg-slate-600 rounded mb-2"></div>
+                                <div class="w-1/2 h-2 bg-slate-600 rounded"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 border-t border-slate-700 pt-4 relative">
+                            <div class="absolute -left-12 top-1/2 -translate-y-1/2 text-red-400/50 text-xs text-right pr-2 font-bold leading-tight">用户<br>懵圈</div>
+                            <div class="w-full h-32 bg-[#0F172A] rounded-xl border-2 border-dashed border-red-500/40 flex items-center justify-center p-4">
+                                <span class="text-slate-600 text-sm text-center">请输入你的提示词...<br><span class="text-[10px] mt-1 block">（你需要告诉我角色、语气、字数、格式等所有细节，否则我将胡言乱语）</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-slate-900 border-[6px] border-[#111827] rounded-full flex items-center justify-center z-20 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+                <span class="text-slate-500 font-black italic text-xl">VS</span>
+            </div>
+
+            <div class="w-1/2 p-14 bg-indigo-950/20 relative flex flex-col">
+                <div class="absolute inset-0 bg-gradient-to-bl from-indigo-900/20 to-transparent pointer-events-none"></div>
+                
+                <div class="relative z-10 mb-8 pl-8">
+                    <h3 class="text-cyan-400 font-bold text-sm tracking-widest mb-2 flex items-center"><i class="fas fa-check-circle mr-2"></i>SOLUTION / Effo 体验重塑</h3>
+                    <h2 class="text-3xl font-black text-white">系统可见性 & 防错设计</h2>
+                    <p class="text-slate-300 text-sm mt-2 max-w-md">将隐性的 Prompt“显性化”为可视界面组件。用户只需做“选择题”而非“简答题”，彻底抹平使用门槛。</p>
+                </div>
+
+                <div class="flex-1 flex flex-col justify-center items-center relative z-10 pl-8">
+                    <div class="w-full max-w-[340px] bg-white rounded-3xl p-1 shadow-[0_0_40px_rgba(79,70,229,0.3)] relative transform transition-transform hover:scale-105 duration-500">
+                        <div class="absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg border border-white/20 z-20">认知负荷 ↓ 80%</div>
+                        
+                        <img src="AI全能写作-选择语气.jpg" alt="可视化语气选择" class="w-full rounded-[20px] relative z-10 border border-slate-100" onerror="this.src='https://via.placeholder.com/340x600/4F46E5/FFF?text=Visual+Parameters+UI'">
+                        
+                        <div class="absolute top-[40%] -left-6 z-20">
+                            <div class="w-16 h-px bg-cyan-400 absolute right-0 top-1/2"></div>
+                            <div class="bg-cyan-900/80 backdrop-blur border border-cyan-400 text-cyan-100 text-[10px] px-2 py-1 rounded absolute -left-12 top-1/2 -translate-y-1/2 whitespace-nowrap">可视化标签</div>
+                        </div>
+                        <div class="absolute bottom-[25%] -left-6 z-20">
+                            <div class="w-16 h-px bg-indigo-400 absolute right-0 top-1/2"></div>
+                            <div class="bg-indigo-900/80 backdrop-blur border border-indigo-400 text-indigo-100 text-[10px] px-2 py-1 rounded absolute -left-16 top-1/2 -translate-y-1/2 whitespace-nowrap">傻瓜式滑块/单选</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-white">
+        <div class="p-16 h-full flex flex-col">
+            <div class="text-center mb-10">
+                <h3 class="text-indigo-600 font-bold tracking-widest text-sm mb-2 uppercase">Methodology Framework</h3>
+                <h2 class="text-4xl font-black text-slate-900">基于“五导家”的体验设计推导全景</h2>
+                <p class="text-slate-500 mt-3 text-sm">将业务诉求转化为切实可行的设计方案，确保设计的每一步都有理有据。</p>
+            </div>
+
+            <div class="flex-1 flex items-center justify-center">
+                <div class="w-full max-w-5xl relative">
+                    <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
                     
-                    <h3 style="margin-top: 30px;">解法 2：场景化预设与沉浸排版</h3>
-                    <p>针对小红书、公众号等不同场景，在前端视觉直接预设对应的格式规范（如Emoji浓度控制、结构化分段），实现“所见即所得”的兴奋型体验。</p>
+                    <div class="grid grid-cols-5 gap-4 relative z-10">
+                        <div class="flex flex-col items-center group">
+                            <div class="w-20 h-20 rounded-full bg-white border-4 border-slate-200 flex items-center justify-center text-2xl text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all bg-white relative">
+                                <i class="fas fa-bullseye"></i>
+                                <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">1</div>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mt-4 mb-2">明确业务诉求</h4>
+                            <div class="bg-slate-50 p-3 rounded-xl text-[10px] text-slate-500 text-center w-full border border-slate-100 h-24">
+                                提升用户活跃、留存与付费转化。<br><strong class="text-indigo-500">破局同质化市场。</strong>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <div class="w-20 h-20 rounded-full bg-white border-4 border-slate-200 flex items-center justify-center text-2xl text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all bg-white relative">
+                                <i class="fas fa-users"></i>
+                                <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">2</div>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mt-4 mb-2">洞见用户诉求</h4>
+                            <div class="bg-slate-50 p-3 rounded-xl text-[10px] text-slate-500 text-center w-full border border-slate-100 h-24">
+                                需要高质量、低门槛、个性化的写作工具。<strong class="text-indigo-500">免去繁琐操作。</strong>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <div class="w-20 h-20 rounded-full bg-indigo-50 border-4 border-indigo-500 flex items-center justify-center text-2xl text-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.2)] transition-all bg-white relative scale-110">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">3</div>
+                            </div>
+                            <h4 class="font-bold text-indigo-700 mt-4 mb-2">定义业务目标</h4>
+                            <div class="bg-indigo-50 p-3 rounded-xl text-[10px] text-indigo-700 text-center w-full border border-indigo-100 h-24 font-medium shadow-sm">
+                                月留存提升 [X]<br>付费转化率达 [X]<br>月均使用达 [X]次
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <div class="w-20 h-20 rounded-full bg-white border-4 border-slate-200 flex items-center justify-center text-2xl text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all bg-white relative">
+                                <i class="fas fa-layer-group"></i>
+                                <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">4</div>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mt-4 mb-2">设定设计目标</h4>
+                            <div class="bg-slate-50 p-3 rounded-xl text-[10px] text-slate-500 text-center w-full border border-slate-100 h-24">
+                                降低不满意率。<br>缩短操作时长。<br><strong class="text-indigo-500">增强界面吸引力。</strong>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <div class="w-20 h-20 rounded-full bg-white border-4 border-slate-200 flex items-center justify-center text-2xl text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all bg-white relative">
+                                <i class="fas fa-paint-brush"></i>
+                                <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">5</div>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mt-4 mb-2">推导设计方案</h4>
+                            <div class="bg-slate-50 p-3 rounded-xl text-[10px] text-slate-500 text-center w-full border border-slate-100 h-24">
+                                极简操作流、智能参数化设计、品牌情感化注入。
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-slate-900 text-white overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-dark z-0"></div>
+        
+        <div class="relative z-10 p-10 pb-4">
+            <div class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur border border-white/20 text-white font-black text-[10px] rounded-full mb-4 shadow-lg tracking-widest uppercase">Guide 05 · Core Interaction Redesign</div>
+            <h2 class="text-4xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">旧版重塑：从“面对白纸”到“参数向导”</h2>
+            <p class="text-slate-400 text-sm max-w-2xl leading-relaxed">承接交互体验拆解，我们在新版彻底抛弃了单纯的大文本框设计，落地为符合小白直觉的模块化卡片与可视化配置项。</p>
+        </div>
+        
+        <div class="relative z-10 flex-1 grid grid-cols-2 gap-0 h-[65%] mt-4">
+            <div class="relative p-10 border-r border-slate-700/50 flex flex-col items-center justify-center group">
+                <div class="absolute top-0 left-10 text-slate-600 font-black text-8xl opacity-10 -z-10 transition-transform duration-700 group-hover:scale-110">BEFORE</div>
+                
+                <div class="w-full max-w-[320px] bg-[#1E293B] rounded-[32px] p-5 border-4 border-slate-700/50 shadow-2xl relative">
+                    <div class="absolute -top-4 -right-4 bg-red-500/90 backdrop-blur text-white text-xs font-black px-4 py-2 rounded-full z-10 border border-red-400">V1.0 旧版大字报</div>
+                    
+                    <div class="w-full h-10 flex justify-between items-center border-b border-slate-700/50 mb-5 pb-2">
+                        <div class="w-6 h-6 rounded-full bg-slate-700"></div>
+                        <div class="w-24 h-4 rounded-md bg-slate-700"></div>
+                        <div class="w-6 h-6 rounded-full bg-slate-700"></div>
+                    </div>
+                    
+                    <div class="relative mb-6">
+                        <div class="absolute -left-16 top-10 flex items-center gap-2 z-20">
+                            <div class="bg-red-500/20 text-red-400 text-xs px-2 py-1.5 rounded border border-red-500/30 whitespace-nowrap">无排版层次</div>
+                            <div class="w-10 h-px bg-red-500/50"></div>
+                        </div>
+                        <div class="w-full h-40 bg-slate-800 rounded-xl border border-red-500/30 p-4 relative">
+                            <div class="w-2/3 h-3 bg-slate-700 rounded mb-3"></div>
+                            <div class="w-1/2 h-3 bg-slate-700 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-slate-900 border-4 border-slate-800 rounded-full flex items-center justify-center z-30 shadow-2xl">
+                <i class="fas fa-arrow-right text-cyan-400 text-2xl animate-pulse"></i>
+            </div>
+
+            <div class="relative p-10 flex flex-col items-center justify-center group">
+                <div class="absolute top-0 right-10 text-indigo-900 font-black text-8xl opacity-20 -z-10 transition-transform duration-700 group-hover:scale-110">AFTER</div>
+                
+                <div class="w-full max-w-[320px] rounded-[32px] p-2 bg-slate-800 border-4 border-slate-700 shadow-[0_0_50px_rgba(79,70,229,0.3)] relative z-20 transform transition-transform hover:scale-[1.02]">
+                    <div class="absolute -top-4 -right-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-xs font-black px-4 py-2 rounded-full shadow-[0_0_20px_rgba(79,70,229,0.5)] z-30">V2.0 体验重塑</div>
+                    
+                    <img src="AI全能写作.jpg" alt="AI全能写作新版" class="w-full rounded-[22px] relative z-10" onerror="this.src='https://via.placeholder.com/400x800/4F46E5/FFF?text=New+UI+Design'">
+                    
+                    <div class="absolute top-[30%] -right-16 flex flex-row-reverse items-center gap-2 z-30">
+                        <div class="bg-indigo-500/30 backdrop-blur text-indigo-200 text-xs font-bold px-3 py-1.5 rounded-lg border border-indigo-400/50 whitespace-nowrap">模块化卡片排版</div>
+                        <div class="w-10 h-px bg-indigo-400/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-indigo-400 ring-4 ring-indigo-400/20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide-wrapper bg-slate-50">
+        <div class="p-16 h-full flex flex-col">
+            <div class="mb-10">
+                <h3 class="text-indigo-600 font-bold tracking-widest text-sm mb-2 uppercase">Guide 05 · Business Conversion</h3>
+                <h2 class="text-4xl font-black text-slate-900">商业链路：场景化拦截与会员转化</h2>
+                <p class="text-slate-500 text-sm mt-2 max-w-xl">不仅关注使用体验，更注重业务诉求。通过在关键触点植入情感化设计，降低流失率，提升付费转化（ARPU）。</p>
+            </div>
+
+            <div class="flex-1 grid grid-cols-2 gap-16 items-center">
+                <div class="flex justify-center relative">
+                    <div class="absolute inset-0 bg-blue-100 rounded-full blur-[80px] -z-10 w-[80%] left-[10%] opacity-50"></div>
+                    
+                    <div class="w-full max-w-[320px] rounded-[32px] p-3 bg-white border border-slate-200 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] relative transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                        <div class="absolute -left-6 -top-6 bg-red-500 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg rotate-[-10deg]">
+                            降低跳出率 <i class="fas fa-arrow-down ml-1"></i>
+                        </div>
+                        <img src="挽留弹窗.jpg" alt="挽留弹窗设计" class="w-full rounded-[24px]" onerror="this.src='https://via.placeholder.com/400x400/FF7A00/FFF?text=Retention+Popup'">
+                    </div>
+                </div>
+
                 <div>
-                    <img src="AI全能写作-选择语气.jpg" alt="模块化组件替代长文本" class="mockup-img" onerror="this.src='https://via.placeholder.com/600x400?text=AI全能写作-选择语气.jpg'">
+                    <div class="bg-white rounded-[24px] p-8 shadow-sm border border-slate-200 mb-6">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fas fa-hand-holding-heart"></i></div>
+                        <h4 class="text-xl font-bold text-slate-800 mb-3">情感化挽留弹窗设计</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">当检测到用户放弃生成或退出时，触发情感化弹窗。不使用生硬的“确定/取消”，而是用生动的插画和福利暗示，挽回流失用户。</p>
+                        <ul class="space-y-2 text-sm text-slate-500 font-medium">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> 插画共情：降低防备心</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> 文案引导：突出“失去感”</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-[24px] p-8 shadow-sm border border-slate-200">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fas fa-crown"></i></div>
+                        <h4 class="text-xl font-bold text-slate-800 mb-3">场景化解锁提示 (会员转化)</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">在用户尝试使用高级语气或超长生成等高阶功能时，自然露出解锁提示。将付费触点融入使用链路，提高转化率。</p>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="methodology">
-        <div class="container">
-            <span class="tag-line">Methodology Framework</span>
-            <h2>基于“五导家”的体验设计推导</h2>
-            <p>将商业指标转化为切实可行的设计策略，确保设计的每一步都有理有据。</p>
-            
-            <ul class="step-list" style="max-width: 800px; margin: 40px auto 0;">
-                <li>
-                    <h3>明确业务诉求</h3>
-                    <p>提升活跃与付费转化。<strong>建立品牌差异化。</strong></p>
-                </li>
-                <li>
-                    <h3>洞见用户诉求</h3>
-                    <p>降低使用门槛，提升内容可用性。<strong>免去繁琐操作。</strong></p>
-                </li>
-                <li>
-                    <h3>定义业务目标</h3>
-                    <p>月留存提升至[X]，付费转化达[X]，月均使用[X]次。</p>
-                </li>
-                <li>
-                    <h3>设定设计目标</h3>
-                    <p>操作时长缩短[X]。<strong>不满意率降低。</strong></p>
-                </li>
-                <li>
-                    <h3>推导设计方案</h3>
-                    <p>极简操作流、可视化参数设计、情感化挽留。</p>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <section id="business">
-        <div class="container grid-2">
-            <div>
-                <span class="tag-line">Business Conversion</span>
-                <h2>商业体验闭环：拦截流失与自然转化</h2>
-                <p>通过情感化的关键触点设计，完成从体验提升到业务数据（留存/付费）增长的闭环转化。</p>
-                
-                <h3 style="margin-top: 30px;">拦截流失：情感化挽留弹窗</h3>
-                <p>改变冷冰冰的“确认退出”系统弹窗。在用户放弃生成时，利用插画共情与“沉没成本”文案提示，有效降低退出率，保卫活跃度。</p>
-                
-                <h3 style="margin-top: 30px;">促进付费：场景化自然解锁</h3>
-                <p>将会员解锁触点无缝融入操作心流中（如选用PRO语气、解锁字数限制时）。缩短转化路径，提升ARPU值。</p>
-            </div>
-            <div>
-                <img src="挽留弹窗.jpg" alt="情感化挽留弹窗" class="mockup-img" onerror="this.src='https://via.placeholder.com/600x800?text=挽留弹窗.jpg'">
             </div>
         </div>
     </section>
